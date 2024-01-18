@@ -1,5 +1,3 @@
-# main.py
-
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, Todo
@@ -8,13 +6,14 @@ from pydantic import BaseModel
 app = FastAPI()
 
 class TodoCreate(BaseModel):
+    id : int
     title: str
     description: str = None
 
 class TodoUpdate(BaseModel):
+    todo_id: int
     title: str
     description: str = None
-    completed: bool
 
 # Dependency
 def get_db():

@@ -1,5 +1,3 @@
-# streamlit_client.py
-
 import streamlit as st
 import requests
 
@@ -26,6 +24,22 @@ def delete_todo():
         else:
             st.error(f"Failed to delete Todo with ID {todo_id}")
 
+def update_todo():
+    todo_id = st.text_input("Enter Todo ID to update")
+    title = st.text_input("Enter updated Todo Title")
+    description = st.text_area("Enter updated Todo Description")
+    if st.button("Update Todo"):
+        response = requests.put(f"{BASE_URL}/todos/{todo_id}", json={"todo_id": todo_id, "title": title, "description": description})
+        
+        if response.status_code == 200:
+            st.success(f"Todo with ID {todo_id} updated successfully")
+        elif response.status_code == 404:
+            st.warning(f"Todo with ID {todo_id} not found")
+        else:
+            st.error(f"Failed to update Todo with ID {todo_id}. Status Code: {response.status_code}, Response Text: {response.text}")
+
+            
+            
 def get_todos():
     response = requests.get(f"{BASE_URL}/todos/")
     if response.status_code == 200:
@@ -36,5 +50,6 @@ def get_todos():
 
 if __name__ == "__main__":
     create_todo()
+    update_todo()
     delete_todo()
     get_todos()
